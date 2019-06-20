@@ -15,17 +15,10 @@ const MONGO_URL = 'mongodb://localhost:27017';
 const DB_NAME = 'alumni';
 const ALUMNI_TABLES = 'people';
 
-async function serve(port, base, images) {
+async function serve(app, base) {
   await initialize();
-  const app = express();
-  app.locals.port = port;
   app.locals.base = base;
-  app.locals.images = images;
   setupRoutes(app);
-  app.listen(port, function() {
-    console.log(`listening on port ${port}`);
-  });
-
 }
 
 async function initialize(){
@@ -35,7 +28,8 @@ async function initialize(){
 }
 
 module.exports = {
-  serve: serve
+  serve: serve,
+  app: express()
 }
 
 /** Prefix for user services */
@@ -112,7 +106,6 @@ function registerUser(){
 
 function deleteUser(){
   return async function(req, res){
-    //console.log(req.body);
     const dbTable = this.db.collection(ALUMNI_TABLES);
     const username = req.body.username;
     const obj = {username: username};

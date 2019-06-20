@@ -6,8 +6,12 @@ const assert = require('assert');
 const path = require('path');
 const process = require('process');
 
-const services = require('./register');
-//const imgStore = require('img-store');
+const register = require('./register');
+const events = require('./events');
+
+const express = require('express');
+const mongo = require('mongodb').MongoClient
+
 
 function usage() {
   console.error(`usage: ${process.argv[1]} PORT...`);
@@ -20,22 +24,22 @@ function getPort(portArg) {
   return port;
 }
 
-/*async function preloadImages(images, argPaths) {
-  for (const argPath of argPaths) {
-    const group = argPath.match(/\/([^\/]+)\/[^\/]+$/)[1] || 'inputs';
-    const id = await images.put(group, argPath);
-    console.log(`${path.basename(argPath)}: ${group}/${id}`);
-  }
-}*/
-
 const BASE = '/api';
+
+async function serve(port){
+
+}
 
 async function go(args) {
   try {
     const port = getPort(args[0]);
-    //const images = await imgStore();
-    //await preloadImages(images, args.slice(1));
-    services.serve(port, BASE);
+    const app = express();
+    app.locals.port = port;
+    register.serve(app, BASE);
+    events.serve(app, BASE);
+    app.listen(port, function() {
+      console.log(`listening on port ${port}`);
+    })
   }
   catch (err) {
     console.error(err);
