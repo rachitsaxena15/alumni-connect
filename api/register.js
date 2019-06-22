@@ -87,7 +87,6 @@ function registerUser(){
     let stat;
     let exist = {};
     exist  = await dbTable.findOne({username: username});
-    console.log(exist);
     if(exist)
       stat = 409;
     else{

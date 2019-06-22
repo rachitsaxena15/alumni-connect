@@ -8,6 +8,7 @@ const process = require('process');
 
 const register = require('./register');
 const events = require('./events');
+const login = require('./login');
 
 const express = require('express');
 const mongo = require('mongodb').MongoClient
@@ -37,6 +38,7 @@ async function go(args) {
     app.locals.port = port;
     register.serve(app, BASE);
     events.serve(app, BASE);
+    login.serve(app, BASE);
     app.listen(port, function() {
       console.log(`listening on port ${port}`);
     })
