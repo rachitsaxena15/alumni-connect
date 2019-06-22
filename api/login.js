@@ -11,6 +11,8 @@ const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 const CONFLICT = 409;
 const SERVER_ERROR = 500;
+const FORBIDDEN = 403;
+const UNAUTHORIZED = 401;
 
 const MONGO_URL = 'mongodb://localhost:27017';
 const DB_NAME = 'alumni';
@@ -41,8 +43,8 @@ const SERVICES = 'services';
 function setupRoutes(app) {
   const base = app.locals.base;
   app.post(`${base}/${SERVICES}/login`, bodyParser.urlencoded({ extended: false }), login(app));
-  /*app.post(`${base}/${SERVICES}/validate`, validate(app));
-  app.post(`${base}/${SERVICES}/logout`, logout(app));*/
+  app.post(`${base}/${SERVICES}/validate`, validate(app));
+  //app.post(`${base}/${SERVICES}/logout`, logout(app));
 }
 
 function login(){
@@ -50,14 +52,38 @@ function login(){
     const dbTable = this.db.collection(ALUMNI_TABLES);
     const username = req.body.username;
     const password = req.body.password;
-    
+
     const data = await dbTable.findOne({username: username});
     if(data.password !== password)
       res.status(400).send();
 
     else{
-      const obj = generateToken();
+      const obj = generateToken(username, password);
       res.status(200).send(obj);
+    }
+  }
+}
+
+function validate(){
+  return async function(req, res){
+    const header = req.headers['authorization'];
+
+    if(typeof header !== 'undefined') {
+      const bearer = header.split(' ');
+      const token = bearer[1];
+      req.token = token;
+    } else {
+      //If header is undefined return Forbidden (403)
+      res.status(FORBIDDEN).send(req.headers);
+      return;
+    }
+    
+    try{
+      data = jwt.verify(req.token, 'MyFirstAptinSanJoseCa95***');
+
+      res.status(OK).send(generateToken(data.username, data.password));
+    } catch(err){
+        return res.status(UNAUTHORIZED).send('unauthorized');
     }
   }
 }
@@ -65,6 +91,6 @@ function login(){
 function generateToken(username, password, expiry ){
   const secret = 'MyFirstAptinSanJoseCa95***'
   const payload = {username: username, password: password};
-  const token = jwt.sign({payload}, secret, {expiresIn: '1h'});
+  const token = jwt.sign(payload, secret, {expiresIn: '1h'});
   return {at: token};
 }
