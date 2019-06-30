@@ -90,7 +90,9 @@ function validate(){
 
 function generateToken(username, password, expiry ){
   const secret = 'MyFirstAptinSanJoseCa95***'
-  const payload = {username: username, password: password};
-  const token = jwt.sign(payload, secret, {expiresIn: '1h'});
+  const iat = Math.floor(new Date() / 1000);
+  const exp = iat + 2592000; //30 days
+  const payload = {username: username, password: password, iat: iat, exp: exp};
+  const token = jwt.sign(payload, secret, {algorithm: 'HS256'});
   return {at: token};
 }
