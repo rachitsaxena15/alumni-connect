@@ -13,7 +13,7 @@ const SERVER_ERROR = 500;
 
 const MONGO_URL = 'mongodb://localhost:27017';
 const DB_NAME = 'alumni';
-const EVENT_TABLES = 'event';
+const EVENT_TABLES = 'events';
 const ALUMNI_TABLE = 'people';
 
 async function serve(app, base) {
@@ -49,6 +49,7 @@ function setupRoutes(app) {
 
 function listEvents(app){
   return async function(req, res){
+    console.log("List events..");
     const dbTable = this.db.collection(EVENT_TABLES);
     result = await dbTable.find().toArray();
     result = result.slice(1,result.length);
@@ -60,6 +61,8 @@ function register(app){
   return async function(req, res){
     const dbTable = this.db.collection(EVENT_TABLES);
 
+
+    
     const event_id = await getNextSequenceValue("eventid");
     const username = req.body.username;
     const event_type = req.body.eventtype;
@@ -73,19 +76,21 @@ function register(app){
     const organizer_email = req.body.organizeremail;
     const event_status = req.body.eventstatus;
 
-    const obj = {event_id: event_id, username: username, event_type: event_type, description: description, 
-      date_posted: date_posted, date_from: date_from, date_to: date_to, locations: locations,
-      no_of_openings: no_of_openings, links: links, organizer_email: organizer_email, 
-      event_status: event_status};
+    const obj = {event_id, username, event_type, description, 
+      date_posted, date_from, date_to, locations,
+      no_of_openings, links, organizer_email, 
+      event_status};
 
     const regex = /\s/;
 
     try{
       const ret = dbTable.insertOne(obj);
+      console.log("Event added..");
       res.status(CREATED).send(obj);
       return;
     }
     catch(err){
+      console.log("Event add failed..", err);
       res.status(SERVER_ERROR).send();
       return;
     }

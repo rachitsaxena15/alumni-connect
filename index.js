@@ -6,9 +6,9 @@ const assert = require('assert');
 const path = require('path');
 const process = require('process');
 
-const register = require('./register');
-const events = require('./events');
-const login = require('./login');
+const register = require('./routes/register');
+const events = require('./routes/events');
+const login = require('./routes/login');
 
 const express = require('express');
 const mongo = require('mongodb').MongoClient
@@ -39,6 +39,12 @@ async function go(args) {
     register.serve(app, BASE);
     events.serve(app, BASE);
     login.serve(app, BASE);
+    if(process.env.NODE_ENV === "production"){
+      app.use(express.static("/client/alumni-connect/build"));
+      app.get("*", (req,res) => {
+        return res.sendFile(path.resolve(__dirname, "client", "alumni-meet", "public", "index.html"));
+      });
+    }
     app.listen(port, function() {
       console.log(`listening on port ${port}`);
     })

@@ -1,4 +1,4 @@
-const jwt = require('../api/node_modules/jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
