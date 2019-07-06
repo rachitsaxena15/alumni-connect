@@ -5,11 +5,11 @@
 const assert = require('assert');
 const path = require('path');
 const process = require('process');
+const bodyParser = require("body-parser");
 
 const register = require('./routes/register');
 const events = require('./routes/events');
 const login = require('./routes/login');
-
 const express = require('express');
 const mongo = require('mongodb').MongoClient
 
@@ -35,6 +35,7 @@ async function go(args) {
   try {
     const port = getPort(args[0]);
     const app = express();
+    app.use(express.json());
     app.locals.port = port;
     register.serve(app, BASE);
     events.serve(app, BASE);
