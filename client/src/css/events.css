@@ -1,0 +1,78 @@
+.events-container {
+  margin: auto;
+}
+.events-container h3,
+.add-event {
+  margin: auto;
+  padding: 5px 10px;
+  float: right;
+}
+.events {
+  margin: auto;
+}
+.header > .btn {
+  max-width: 150px;
+}
+.events h3 {
+  text-align: center;
+}
+.events-info {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-between;
+  width: 60%;
+  margin: auto;
+  margin-bottom: 3px;
+}
+
+.event-container {
+  display: flex;
+  width: 60%;
+  margin: auto;
+  margin-bottom: 3px;
+  padding: 3px 8px;
+  border: 3px solid gray;
+  box-shadow: 0px 0px 2px gray;
+}
+.events-info {
+  border: none;
+  box-shadow: none;
+}
+.event-container .e-details {
+  width: 200px;
+}
+.event-container .e-desc {
+  width: 500px;
+}
+.event-container .e-desc form {
+  margin: 10px 0px;
+}
+.event-container label {
+  font-size: 16px;
+}
+.event-container .info {
+  font-size: 13px;
+  margin: 5px;
+}
+.event-container .info p {
+  margin: 0px;
+}
+.btn {
+  background: none;
+  border: 2px solid gray;
+  padding: 5px;
+  color: gray;
+  box-shadow: 0px 0px 1px whitesmoke;
+}
+.btn:hover {
+  border: 2px solid whitesmoke;
+  color: whitesmoke;
+}
+
+.show {
+  display: inline-block;
+}
+
+.hide {
+  display: none;
+}

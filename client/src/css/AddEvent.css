@@ -1,0 +1,18 @@
+.add-new-event{
+}
+
+.add-new-event-fields{
+    display: flex;
+    align-content: space-between;
+    margin: 3px;
+}
+.add-new-event-fields label{
+    display: inline-block;
+    min-width: 120px;    
+    flex: 1;
+    margin: 1px 5px;
+}
+.add-new-event-submit{
+width: 100%;
+}
+
